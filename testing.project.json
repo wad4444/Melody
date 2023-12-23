@@ -1,0 +1,39 @@
+{
+	"name": "testing",
+	"globIgnorePaths": [
+		"**/package.json",
+		"**/tsconfig.json"
+	],
+	"tree": {
+        "$className": "DataModel",	
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+            "$path": "testing/server"
+		},
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+            "Melody": {
+                "$path": "out",
+                "include": {
+                    "$path": "include",
+                    "node_modules": {
+                        "$className": "Folder",
+                        "@rbxts": {
+                            "$path": "node_modules/@rbxts"
+                        }
+                    }
+                }
+            },
+            "Shared": {
+                "$path": "testing/shared"
+            }
+		},
+		"StarterPlayer": {
+			"$className": "StarterPlayer",
+			"StarterPlayerScripts": {
+				"$className": "StarterPlayerScripts",
+                "$path": "out/client"
+			}
+		}
+	}
+}
