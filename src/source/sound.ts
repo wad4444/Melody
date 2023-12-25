@@ -11,7 +11,7 @@ export class MelodySound {
 	private static readonly playingSounds: MelodySound[] = [];
 
 	private priority = 1;
-	private shouldMute = false;
+	private muteOthers = false;
 	private janitor = new Janitor();
 
 	private volumeChangeThreads: thread[] = [];
@@ -24,8 +24,8 @@ export class MelodySound {
 		this.Volume = this.Instance.Volume;
 	}
 
-	public Play(ShouldMute = false, Priority = this.priority) {
-		this.shouldMute = ShouldMute;
+	public Play(MuteOthers = false, Priority = this.priority) {
+		this.muteOthers = MuteOthers;
 		this.priority = Priority;
 		MelodySound.playingSounds.push(this);
 		MelodySound.updateAll();
@@ -67,8 +67,9 @@ export class MelodySound {
 		}
 	}
 
-	private static updateAll() {
-		MelodySound.playingSounds.forEach((Sound) => Sound.update());
+	public SetVolume(NewVolume: number) {
+		this.Volume = NewVolume;
+		this.update();
 	}
 
 	private setVolume(NewVolume: number) {
@@ -90,9 +91,13 @@ export class MelodySound {
 		}
 	}
 
+	private static updateAll() {
+		MelodySound.playingSounds.forEach((Sound) => Sound.update());
+	}
+
 	private static shouldMute(Sound: MelodySound) {
 		for (const [_, CurrentSound] of pairs(this.playingSounds)) {
-			if (CurrentSound.priority > Sound.priority && CurrentSound.shouldMute) {
+			if (CurrentSound.priority > Sound.priority && CurrentSound.muteOthers) {
 				return true;
 			}
 		}
