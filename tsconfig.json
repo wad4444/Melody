@@ -25,6 +25,7 @@
 		"tsBuildInfoFile": "out/tsconfig.tsbuildinfo",
 		"plugins": [
 			{"transform": "rbxts-transformer-private"}
-		]
+		],
+		"declaration": true
 	}
 }

@@ -1,15 +1,23 @@
 {
-  "name": "melody",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@rbxts/melody",
+  "version": "0.0.1",
+  "description": "A simple and lightweight library for playing sounds",
+  "main": "out/init.lua",
   "scripts": {
     "build": "rbxtsc",
     "watch": "rbxtsc -w"
   },
+  "files": [
+    "out",
+    "!**/*.tsbuildinfo"
+  ],
+  "author": "g1mmethemoney",
+  "types": "out/index.d.ts",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },  
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
     "@rbxts/types": "^1.0.737",

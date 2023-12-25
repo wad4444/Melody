@@ -17,6 +17,8 @@ export class MelodySound {
 	private volumeChangeThreads: thread[] = [];
 
 	public VolumeChangeType = VolumeChangeType.Smooth;
+	public VolumeChangeTime = 0.5;
+
 	public MutedVolume = 0;
 	public Volume: number;
 
@@ -29,6 +31,8 @@ export class MelodySound {
 		this.priority = Priority;
 		MelodySound.playingSounds.push(this);
 		MelodySound.updateAll();
+
+		this.Instance.Play();
 
 		this.janitor.Add(this.Instance.Ended.Connect(() => this.removeSoundFromDirectory()));
 		this.janitor.Add(this.Instance.Stopped.Connect(() => this.removeSoundFromDirectory()));
@@ -84,7 +88,7 @@ export class MelodySound {
 					const lerp = Lerps.number(this.Volume, NewVolume);
 					for (const t of $range(0, 1, 0.01)) {
 						this.Instance.Volume = lerp(t);
-						task.wait();
+						task.wait(this.VolumeChangeTime * 0.01);
 					}
 				}),
 			);
