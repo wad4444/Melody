@@ -33,6 +33,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@rbxts/altmake": "^0.1.5",
     "@rbxts/janitor": "^1.15.4-ts.0",
     "@rbxts/lerp-functions": "^1.0.2",
     "@rbxts/services": "^1.5.1"

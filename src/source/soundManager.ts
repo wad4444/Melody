@@ -1,6 +1,7 @@
 /* eslint-disable roblox-ts/no-array-pairs */
 import { SoundService } from "@rbxts/services";
 import { MelodySound } from "./sound";
+import { Clone, Make, Modify } from "@rbxts/altmake";
 
 export namespace SoundManager {
 	// eslint-disable-next-line prefer-const
@@ -14,40 +15,57 @@ export namespace SoundManager {
 	): Record<keyof T, () => MelodySound> {
 		const soundDirectory = {} as Record<keyof T, () => MelodySound>;
 		for (const [Name, Instance] of pairs(Directory)) {
-			soundDirectory[Name as keyof T] = () => {
-				return new MelodySound(Instance as Sound);
+			soundDirectory[Name as keyof T] = (DestroyOnEnd = true) => {
+				const clonedInstance = Clone(Instance as Sound);
+				DestroyOnEnd && clonedInstance.Stopped.Connect(() => clonedInstance.Destroy());
+
+				return new MelodySound(clonedInstance);
 			};
 		}
 
 		return soundDirectory;
 	}
 
-	export function fromIdDirectory<
-		T extends Record<string, { Id: string; Props?: InstanceProperties<Sound> } | string>,
-	>(Directory: T): Record<keyof T, () => MelodySound> {
+	export function fromIdDirectory<T extends Record<string, string>>(
+		Directory: T,
+	): Record<keyof T, () => MelodySound> {
 		const soundDirectory = {} as Record<keyof T, () => MelodySound>;
 		for (const [Name, IdWithProps] of pairs(Directory)) {
-			const instance = new Instance("Sound");
-			instance.Parent = Origin;
+			const instance = Make("Sound", {
+				Parent: Origin,
+			});
 
 			if (typeIs(IdWithProps, "string")) {
-				instance.SoundId = IdWithProps;
+				Modify(instance, {
+					SoundId: IdWithProps,
+				});
 			} else if (typeIs(IdWithProps, "table")) {
-				const { Id, Props } = IdWithProps as { Id: string; Props?: InstanceProperties<Sound> };
-				instance.SoundId = Id;
-
-				if (Props) {
-					for (const [Key, Value] of pairs(Props)) {
-						instance[Key as never] = Value as never;
-					}
-				}
+				const [Id, Props] = IdWithProps as [string, InstanceProperties<Sound>?];
+				Modify(instance, {
+					SoundId: Id,
+					...Props,
+				});
 			}
 
-			soundDirectory[Name as keyof T] = () => {
-				return new MelodySound(instance);
+			soundDirectory[Name as keyof T] = (DestroyOnEnd = true) => {
+				const clonedInstance = Clone(instance);
+				DestroyOnEnd && clonedInstance.Stopped.Connect(() => clonedInstance.Destroy());
+
+				return new MelodySound(clonedInstance);
 			};
 		}
 
 		return soundDirectory;
+	}
+
+	export function memoize<T extends Record<string, (DestroyOnEnd: boolean) => MelodySound>>(
+		directory: T,
+	): Record<keyof T, MelodySound> {
+		const dir = {} as Record<keyof T, MelodySound>;
+		for (const [i, v] of pairs(directory)) {
+			dir[i as keyof T] = (v as (DestroyOnEnd: boolean) => MelodySound)(false);
+		}
+
+		return dir;
 	}
 }
