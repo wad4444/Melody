@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/melody",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "A simple and lightweight library for playing sounds",
   "main": "out/init.lua",
   "scripts": {
