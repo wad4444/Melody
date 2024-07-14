@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/melody",
-  "version": "0.0.5",
+  "version": "0.1.8",
   "description": "A simple and lightweight library for playing sounds",
   "main": "out/init.lua",
   "scripts": {
@@ -11,7 +11,7 @@
     "out",
     "!**/*.tsbuildinfo"
   ],
-  "author": "g1mmethemoney",
+  "author": "wad4444",
   "types": "out/index.d.ts",
   "keywords": [],
   "license": "MIT",
